@@ -59,8 +59,11 @@ class EmailBackend(BaseEmailBackend):
         if not email_messages:
             return
         sent = self._send(email_messages)
-        if sent:
+        
+        if sent is True:
             return len(email_messages)
+        else:
+            return sent
         return 0
 
 
@@ -143,6 +146,7 @@ class EmailBackend(BaseEmailBackend):
             to_send = PMBatchMail(messages=pm_messages)
         try:
             to_send.send(test=self.test_mode)
+            return str(to_send.message_id)
         except:
             if self.fail_silently:
                 return False
